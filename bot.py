@@ -11,7 +11,7 @@ import discord
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
-@bot.command()
+@bot.command(help="adds text to spongebob image")
 async def spongebob(ctx,arg):
     addstr = str(arg)
     img = Image.open("spongebob.jpg")
