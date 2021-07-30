@@ -16,8 +16,8 @@ async def spongebob(ctx,arg):
     addstr = str(arg)
     img = Image.open("spongebob.jpg")
     draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype("arial.ttf", 48)
-    draw.text((590, 32),addstr,(255,255,255),font=font)
+    font = ImageFont.truetype("uni.ttf", 55)
+    draw.text((590, 20),addstr,(255,255,255),font=font)
     with BytesIO() as image_binary:
             img.save(image_binary, 'PNG')
             image_binary.seek(0)
