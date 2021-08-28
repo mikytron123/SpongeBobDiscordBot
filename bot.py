@@ -23,8 +23,8 @@ def has_glyph(font, glyph):
 
 @slash.slash(name="spongebob",
              description="Adds text to spongebob image")
-async def spongebob(ctx,arg):
-    addstr = str(arg)
+async def spongebob(ctx,text):
+    addstr = str(text)
     img = Image.open("spongebob.jpg")
     draw = ImageDraw.Draw(img)
     startlen = 590
