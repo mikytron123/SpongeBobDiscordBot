@@ -6,11 +6,14 @@ from PIL import ImageDraw
 from discord.ext import commands
 from dotenv import load_dotenv
 from io import BytesIO
+from discord_slash import SlashCommand 
+
 from fontTools.ttLib import TTFont
 load_dotenv()
 import discord
 TOKEN = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
+slash = SlashCommand(bot, sync_commands=True)
 
 def has_glyph(font, glyph):
     for table in font['cmap'].tables:
@@ -18,7 +21,8 @@ def has_glyph(font, glyph):
             return True
     return False
 
-@bot.command(help="adds text to spongebob image")
+@slash.slash(name="spongebob",
+             description="Adds text to spongebob image")
 async def spongebob(ctx,arg):
     addstr = str(arg)
     img = Image.open("spongebob.jpg")
