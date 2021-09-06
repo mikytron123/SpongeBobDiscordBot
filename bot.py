@@ -6,7 +6,9 @@ from PIL import ImageDraw
 from discord.ext import commands
 from dotenv import load_dotenv
 from io import BytesIO
-from discord_slash import SlashCommand 
+from discord_slash import SlashCommand
+from discord_slash.utils.manage_commands import create_option
+from discord_slash.model import SlashCommandOptionType
 
 from fontTools.ttLib import TTFont
 load_dotenv()
@@ -22,8 +24,17 @@ def has_glyph(font, glyph):
     return False
 
 @slash.slash(name="spongebob",
-             description="Adds text to spongebob image")
+             description="Adds text to spongebob image",
+              options=[
+               create_option(
+                 name="text",
+                 description="Text to add to image",
+                 option_type=SlashCommandOptionType.STRING,
+                 required=True
+               )
+             ])
 async def spongebob(ctx,text):
+    await ctx.defer()
     addstr = str(text)
     img = Image.open("spongebob.jpg")
     draw = ImageDraw.Draw(img)
