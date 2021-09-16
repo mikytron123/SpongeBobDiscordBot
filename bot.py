@@ -39,15 +39,18 @@ async def spongebob(ctx,text):
     img = Image.open("spongebob.jpg")
     draw = ImageDraw.Draw(img)
     startlen = 590
+    maxlen = 480
+    startsize = 55
+    FONT_SIZE = await getfontsize(startsize,maxlen,addstr)
     for char in addstr:
         checkfont = TTFont('uni.ttf')
         checkfont2 = TTFont('color.ttf')
         if has_glyph(checkfont,char):
-            font = ImageFont.truetype("uni.ttf",55,encoding='unic')
+            font = ImageFont.truetype("uni.ttf",FONT_SIZE,encoding='unic')
         elif has_glyph(checkfont2,char):
-            font = ImageFont.truetype("color.ttf",55)
+            font = ImageFont.truetype("color.ttf",FONT_SIZE)
         else:
-            font = ImageFont.truetype("uni.ttf",55,encoding='unic')
+            font = ImageFont.truetype("uni.ttf",FONT_SIZE,encoding='unic')
         size = font.getsize(char)
         draw.text((startlen, 20),char,font=font,embedded_color=True)
         startlen += size[0]
@@ -55,6 +58,17 @@ async def spongebob(ctx,text):
             img.save(image_binary, 'PNG')
             image_binary.seek(0)
             await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+
+async def getfontsize(startsize,maxlen,addstr):
+    FONT_SIZE = startsize
+    for font_size in range(startsize,5,-1):
+        font = ImageFont.truetype("uni.ttf",font_size,encoding='unic')
+        if font.getsize(addstr)[0] <maxlen:
+            FONT_SIZE = font_size
+            break
+    return FONT_SIZE
+
+
 
 @bot.event
 async def on_ready():
