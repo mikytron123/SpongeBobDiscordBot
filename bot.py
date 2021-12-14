@@ -6,16 +6,12 @@ from PIL import ImageDraw
 from discord.ext import commands
 from dotenv import load_dotenv
 from io import BytesIO
-from discord_slash import SlashCommand
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.model import SlashCommandOptionType
-
+from discord.ext import commands
 from fontTools.ttLib import TTFont
 load_dotenv()
 import discord
+from discord.commands import Option
 TOKEN = os.getenv('DISCORD_TOKEN')
-bot = commands.Bot(command_prefix='!')
-slash = SlashCommand(bot, sync_commands=True)
 
 def has_glyph(font, glyph):
     for table in font['cmap'].tables:
@@ -23,17 +19,20 @@ def has_glyph(font, glyph):
             return True
     return False
 
-@slash.slash(name="spongebob",
-             description="Adds text to spongebob image",
-              options=[
-               create_option(
-                 name="text",
-                 description="Text to add to image",
-                 option_type=SlashCommandOptionType.STRING,
-                 required=True
-               )
-             ])
-async def spongebob(ctx,text):
+class Bot(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix=commands.when_mentioned_or("$"))
+
+    async def on_ready(self):
+        print(f"Logged in as {self.user} (ID: {self.user.id})")
+        print("------")
+
+bot = Bot()
+
+
+@bot.slash_command(name="spongebob",
+             description="Adds text to spongebob image")
+async def spongebob(ctx,text:Option(str,"Text to add to image",required=True)):
     await ctx.defer()
     addstr = str(text)
     img = Image.open("spongebob.jpg")
@@ -67,11 +66,5 @@ async def getfontsize(startsize,maxlen,addstr):
             FONT_SIZE = font_size
             break
     return FONT_SIZE
-
-
-
-@bot.event
-async def on_ready():
-    print(f'{bot.user.name} has connected to Discord!')
 
 bot.run(TOKEN)

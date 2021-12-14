@@ -1,5 +1,4 @@
-discord.py
 pillow
 python-dotenv
 fontTools
-discord-py-slash-command
+git+https://github.com/Pycord-Development/pycord#egg=py-cord
